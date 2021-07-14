@@ -41,3 +41,42 @@ app.route("/articles")
             console.log("Deleted successfully")
         }))
     }))
+
+app.route("/articles/:_id")
+
+    .get(((req, res) => {
+        Article.findOne({
+            _id: req.params._id
+        }, (err, found) => {
+            if (err) res.send(err)
+            res.send(found)
+        })
+    }))
+
+    .put(function (req, res) {
+        Article.update(
+            {_id: req.params._id},
+            {title: req.body.title, content: req.body.content},
+            {overwrite: true},
+            function (err) {
+                if (err) console.log(err);
+            }
+        )
+    })
+
+    .patch((req, res) => {
+        Article.updateOne({_id: req.params._id}, req.body, function (err, response) {
+            if (err) res.send(err)
+            res.send("Success")
+        })
+    })
+
+    .delete(((req, res) => {
+        Article.deleteOne(
+            {_id: req.params._id},
+            (err => {
+                if (err) res.send(err)
+                res.send("Deleted!!")
+            })
+        )
+    }))
